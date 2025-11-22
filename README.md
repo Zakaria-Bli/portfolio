@@ -65,6 +65,35 @@ To maintain a clean dependency graph, we enforce the following rules:
 
 These rules are automated using `eslint-plugin-boundaries`, ensuring that architectural violations are caught at development time.
 
+## Docker Support
+
+This project includes a fully configured Docker setup for both development and production environments, utilizing multi-stage builds for optimization.
+
+### Development
+
+To run the application in a containerized development environment:
+
+1.  Ensure Docker and Docker Compose are installed.
+2.  Modify `docker-compose.yml` to target the `dev` stage and uncomment volume mounts for hot reloading.
+3.  Run:
+    ```bash
+    docker compose up --build
+    ```
+
+### Production
+
+The default `docker-compose.yml` configuration is optimized for production:
+
+- **Multi-stage Build**: Uses `base`, `deps`, `builder`, and `runner` stages to minimize image size.
+- **Standalone Output**: Leverages Next.js standalone mode.
+- **Security**: Runs as a non-root user (`nextjs`).
+
+To start the production server:
+
+```bash
+docker compose up --build
+```
+
 ## Branching & Commit Guidelines
 
 I follow [Conventional Commits](https://www.conventionalcommits.org) and use a simple branching strategy to keep work isolated and reviewable.
