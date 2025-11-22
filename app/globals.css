@@ -1,26 +1,187 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: var(--font-primary);
+  --font-mono: var(--font-secondary);
+
+  /* Primary Colors */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* Background */
+  --color-card: var(--background);
+  --color-popover: var(--background);
   --color-background: var(--background);
+
+  /* foreground */
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card-foreground: var(--foreground);
+  --color-popover-foreground: var(--foreground);
+
+  /* Default Colors */
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Breakpoints */
+  --breakpoint-xs: 22rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Primary Colors */
+  --primary: oklch(0.85 0.25 150);
+  --primary-foreground: oklch(0.18 0.02 254);
+  --secondary: oklch(0.65 0.15 230);
+  --secondary-foreground: oklch(0.95 0.01 254);
+
+  /* Background & Foreground */
+  --background: oklch(0.18 0.02 254);
+  --foreground: oklch(0.95 0.01 254);
+
+  /* Default Colors */
+  --card: oklch(0.25 0.02 254);
+  --card-foreground: oklch(0.95 0.01 254);
+
+  --popover: oklch(0.25 0.02 254);
+  --popover-foreground: oklch(0.95 0.01 254);
+
+  --muted: oklch(0.32 0.02 254);
+  --muted-foreground: oklch(0.65 0.02 254);
+
+  --accent: oklch(0.25 0.02 254);
+  --accent-foreground: oklch(0.95 0.01 254);
+
+  --destructive: oklch(0.58 0.22 25);
+  --border: oklch(0.32 0.02 254);
+  --input: oklch(0.32 0.02 254);
+  --ring: oklch(0.85 0.25 150);
+
+  /* Radius */
+  --radius: 0.625rem;
+}
+
+.dark {
+  /* Primary Colors */
+  --primary: oklch(0.85 0.25 150);
+  --primary-foreground: oklch(0.18 0.02 254);
+  --secondary: oklch(0.65 0.15 230);
+  --secondary-foreground: oklch(0.95 0.01 254);
+
+  /* Background & Foreground */
+  --background: oklch(0.18 0.02 254);
+  --foreground: oklch(0.95 0.01 254);
+
+  /* Default Colors */
+  --card: oklch(0.25 0.02 254);
+  --card-foreground: oklch(0.95 0.01 254);
+
+  --popover: oklch(0.25 0.02 254);
+  --popover-foreground: oklch(0.95 0.01 254);
+
+  --muted: oklch(0.32 0.02 254);
+  --muted-foreground: oklch(0.65 0.02 254);
+
+  --accent: oklch(0.25 0.02 254);
+  --accent-foreground: oklch(0.95 0.01 254);
+
+  --destructive: oklch(0.58 0.22 25);
+  --border: oklch(0.32 0.02 254);
+  --input: oklch(0.32 0.02 254);
+  --ring: oklch(0.85 0.25 150);
+
+  /* Radius */
+  --radius: 0.625rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  /* Typography Scale */
+  h1 {
+    @apply text-[2rem] font-bold leading-tight;
+    letter-spacing: 0.02rem;
+  }
+
+  h2 {
+    @apply text-[1.625rem] font-semibold leading-tight;
+    letter-spacing: 0.02rem;
+  }
+
+  h3 {
+    @apply text-[1.375rem] font-semibold leading-relaxed;
+    letter-spacing: 0.025rem;
+  }
+
+  h4 {
+    @apply text-xl font-medium leading-relaxed;
+    letter-spacing: 0.025rem;
+  }
+
+  h5 {
+    @apply text-[1.125rem] font-medium leading-relaxed;
+    letter-spacing: 0.03rem;
+  }
+
+  h6 {
+    @apply text-lg font-medium leading-relaxed;
+    letter-spacing: 0.03rem;
+  }
+
+  small {
+    @apply text-sm font-normal leading-normal;
+    letter-spacing: 0.03rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@utility flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@utility flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@utility x-paddings {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
