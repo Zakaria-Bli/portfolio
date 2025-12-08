@@ -1,0 +1,19 @@
+# If using docker for development, add these volumes to the service
+# volumes:
+# - .:/app
+# - /app/node_modules # Persist node_modules to avoid reinstalling
+
+version: "3.8"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner # Target the runner stage, change to dev for development
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.example # Change this to your .env file
+    environment:
+      - NODE_ENV=production # Change this to development for development
