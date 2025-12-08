@@ -117,12 +117,13 @@ const eslintConfig = defineConfig([
           ],
         },
       ],
-      "no-restricted-imports": [
+      "import/no-restricted-paths": [
         "error",
         {
-          patterns: [
+          zones: [
             {
-              group: ["../*", "./*"],
+              target: "./src/**/*",
+              from: ["../*", "./*"],
               message: "Use the @ alias instead of relative paths.",
             },
           ],
