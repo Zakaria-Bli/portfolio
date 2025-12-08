@@ -15,29 +15,38 @@ const eslintConfig = defineConfig([
       boundaries: boundariesPlugin,
     },
     settings: {
-      "boundaries/include": ["src/**/*"],
+      "boundaries/include": [
+        "app/**/*",
+        "features/**/*",
+        "components/**/*",
+        "hooks/**/*",
+        "lib/**/*",
+        "shared/**/*",
+        "utils/**/*",
+      ],
       "boundaries/elements": [
         {
           mode: "full",
           type: "shared",
-          pattern: ["src/**/*", "!src/app/**/*", "!src/features/**/*"],
+          pattern: [
+            "components/**/*",
+            "hooks/**/*",
+            "lib/**/*",
+            "shared/**/*",
+            "utils/**/*",
+          ],
         },
         {
           mode: "full",
           type: "feature",
           capture: ["featureName"],
-          pattern: ["src/features/*/**/*"],
+          pattern: ["features/*/**/*"],
         },
         {
           mode: "full",
           type: "app",
           capture: ["_", "fileName"],
-          pattern: ["src/app/**/*"],
-        },
-        {
-          mode: "full",
-          type: "neverImport",
-          pattern: ["src/*"],
+          pattern: ["app/**/*"],
         },
       ],
     },
@@ -107,12 +116,8 @@ const eslintConfig = defineConfig([
               ],
             },
             {
-              from: ["app", "neverImport"],
-              allow: ["shared", "feature"],
-            },
-            {
               from: ["app"],
-              allow: [["app", { fileName: "*.css" }]],
+              allow: ["shared", "feature", ["app", { fileName: "*.css" }]],
             },
           ],
         },
@@ -122,7 +127,37 @@ const eslintConfig = defineConfig([
         {
           zones: [
             {
-              target: "./src/**/*",
+              target: "./app/**/*",
+              from: ["../*", "./*"],
+              message: "Use the @ alias instead of relative paths.",
+            },
+            {
+              target: "./features/**/*",
+              from: ["../*", "./*"],
+              message: "Use the @ alias instead of relative paths.",
+            },
+            {
+              target: "./components/**/*",
+              from: ["../*", "./*"],
+              message: "Use the @ alias instead of relative paths.",
+            },
+            {
+              target: "./hooks/**/*",
+              from: ["../*", "./*"],
+              message: "Use the @ alias instead of relative paths.",
+            },
+            {
+              target: "./lib/**/*",
+              from: ["../*", "./*"],
+              message: "Use the @ alias instead of relative paths.",
+            },
+            {
+              target: "./shared/**/*",
+              from: ["../*", "./*"],
+              message: "Use the @ alias instead of relative paths.",
+            },
+            {
+              target: "./utils/**/*",
               from: ["../*", "./*"],
               message: "Use the @ alias instead of relative paths.",
             },
@@ -139,7 +174,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     // Custom ignores
-    "src/components/ui/**/*",
+    "components/ui/**/*",
     "node_modules/**",
   ]),
 ]);
