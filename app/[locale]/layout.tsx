@@ -9,7 +9,7 @@ import { getMessages } from "next-intl/server"
 import "./globals.css"
 
 import { getDirection, Locale } from "@/lib/i18n"
-import { defaultMetadata } from "@/lib/seo/config"
+import { getMetadata } from "@/lib/seo/config"
 import { websiteSchema, personSchema, renderJsonLd } from "@/lib/seo/schema"
 
 import type { Metadata } from "next"
@@ -30,11 +30,14 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   weight: ["100", "200", "300", "400", "500", "600", "700"],
 })
 
-export const metadata: Metadata = defaultMetadata
-
 type Props = {
   children: React.ReactNode
   params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  return getMetadata(locale as Locale)
 }
 
 export function generateStaticParams() {
@@ -59,11 +62,15 @@ export default async function RootLayout({
         {/* Structured Data for SEO */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={renderJsonLd(websiteSchema())}
+          dangerouslySetInnerHTML={renderJsonLd(
+            websiteSchema(locale as Locale)
+          )}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={renderJsonLd(personSchema())}
+          dangerouslySetInnerHTML={renderJsonLd(
+            personSchema(undefined, locale as Locale)
+          )}
         />
       </head>
       <body

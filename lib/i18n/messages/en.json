@@ -2,6 +2,10 @@
   "common": {
     "language": "Language"
   },
+  "Metadata": {
+    "title": "iZak Code - Full Stack Developer",
+    "description": "Full-stack developer specializing in React, Next.js, and TypeScript. Building modern web applications with great UX."
+  },
   "HomePage": {
     "title": "To get started, edit the page.tsx file.",
     "description": "Looking for a starting point or more instructions? Head over to <templates>Templates</templates> or the <learning>Learning</learning> center.",
