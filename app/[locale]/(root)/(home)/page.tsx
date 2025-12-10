@@ -1,20 +1,25 @@
 import Image from "next/image"
 import { useTranslations } from "next-intl"
 
+import LocaleSwitcher from "@/components/shared/LocaleSwitcher"
+
 export default function Home() {
   const t = useTranslations("HomePage")
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background font-sans">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-card sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt={t("nextLogoAlt")}
-          width={100}
-          height={20}
-          priority
-        />
+        <div className="flex w-full items-center justify-between">
+          <Image
+            className="dark:invert"
+            src="/next.svg"
+            alt={t("nextLogoAlt")}
+            width={100}
+            height={20}
+            priority
+          />
+          <LocaleSwitcher variant="dropdown" showLabel={true} />
+        </div>
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-foreground">
             {t("title")}

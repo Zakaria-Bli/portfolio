@@ -27,7 +27,7 @@ export const locales: LocaleConfig[] = [
     name: "Arabic",
     nativeName: "العربية",
     direction: "rtl",
-    flag: "🇸🇦",
+    flag: "🇩🇿",
   },
   {
     code: "fr",
