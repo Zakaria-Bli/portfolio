@@ -9,9 +9,16 @@ Welcome to the project documentation. Here you'll find guides and references for
 
 ## 🔧 Feature Guides
 
+- **[Internationalization (i18n)](../lib/i18n/README.md)**
+  Multi-language support with English, Arabic (RTL), and French. Covers translations, navigation, and RTL/LTR handling.
+
 - **[SEO Configuration](../lib/seo/README.md)**
-  Guide to the SEO setup, including metadata, sitemaps, and structured data.
+  SEO optimization including metadata, structured data, sitemaps, and social media previews.
 
 ## 🚀 Getting Started
 
-If you're new to the project, we recommend starting with the **Architecture** document to understand the codebase organization.
+If you're new to the project:
+
+1. Start with **[Architecture](./architecture.md)** to understand the codebase organization
+2. Review **[i18n](../lib/i18n/README.md)** if working with translations or multi-language features
+3. Check **[SEO](../lib/seo/README.md)** when configuring metadata or adding new pages
