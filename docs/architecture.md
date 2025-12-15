@@ -9,18 +9,56 @@ This document provides a comprehensive overview of the project's architecture, i
 ```
 portfolio-next/
 ├── docs/                    # Documentation files
+│   ├── architecture.md      # This file
 │   └── README.md            # Documentation index
 │
 ├── public/                  # Static assets
+│   ├── og-image.png         # Open Graph image
+│   └── favicon.ico          # Site favicon
 │
 ├── app/                     # Next.js App Router (UI layer)
+│   ├── [locale]/            # Dynamic locale routes
+│   │   ├── (root)/          # Public pages
+│   │   ├── layout.tsx       # Root layout with i18n
+│   │   └── globals.css      # Global styles with RTL/LTR
+│   ├── sitemap.ts           # Dynamic sitemap
+│   ├── robots.ts            # Robots.txt
+│   └── manifest.ts          # PWA manifest
+│
 ├── components/              # Shared React components
+│   ├── shared/              # App-wide components
+│   │   └── LocaleSwitcher.tsx
+│   └── ui/                  # shadcn/ui components
+│       └── dropdown-menu.tsx
+│
 ├── features/                # Feature-based modules
+│   └── [feature-name]/      # Domain-specific features
+│
 ├── lib/                     # Library configurations
-└── shared/                  # Shared utilities and types
-    ├── constants/           # Application constants
-    ├── types/               # Shared TypeScript types
-    └── utils/               # Utility functions
+│   ├── utils.ts             # Common utilities
+│   ├── i18n/                # Internationalization
+│   │   ├── config.ts        # Locale definitions
+│   │   ├── routing.ts       # Routing configuration
+│   │   ├── navigation.ts    # Type-safe navigation
+│   │   ├── request.ts       # Server-side config
+│   │   ├── utils.ts         # i18n utilities
+│   │   ├── index.ts         # Public API
+│   │   ├── README.md        # i18n documentation
+│   │   └── messages/        # Translation files
+│   │       ├── ar.json
+│   │       ├── en.json
+│   │       └── fr.json
+│   └── seo/                 # SEO configuration
+│       ├── config.ts        # Metadata generation
+│       ├── schema.ts        # Structured data
+│       └── README.md        # SEO documentation
+│
+├── shared/                  # Shared utilities and types
+│   ├── constants/           # Application constants
+│   ├── types/               # Shared TypeScript types
+│   └── utils/               # Utility functions
+│
+├── proxy.ts                 # Routing proxy (Next.js 16)
 ├── .env.example             # Environment variables template
 ├── Dockerfile               # Multi-stage Docker configuration
 ├── docker-compose.yml       # Docker Compose setup
@@ -60,26 +98,18 @@ The **App Layer** contains Next.js App Router pages, layouts, and route groups.
 
 ```
 app/
-├── (auth)/              # Auth route group (signin, signup)
-│   ├── layout.tsx       # Auth-specific layout
-│   ├── signin/
-│   │   └── page.tsx
-│   └── signup/
-│       └── page.tsx
+├── [locale]/              # Dynamic locale segment (en, ar, fr)
+│   ├── (root)/            # Public route group
+│   │   ├── layout.tsx     # Public layout
+│   │   └── (home)/        # Home page
+│   │       └── page.tsx
+│   │
+│   ├── layout.tsx         # Root layout (fonts, metadata, i18n provider)
+│   └── globals.css        # Global styles with RTL/LTR overrides
 │
-├── (root)/              # Public route group (home, etc.)
-│   ├── layout.tsx       # Public layout
-│   └── (home)/
-│       └── page.tsx
-│
-├── dashboard/           # Dashboard route group
-│   ├── layout.tsx       # Dashboard layout
-│   └── (home)/
-│       └── page.tsx
-│
-├── layout.tsx           # Root layout (fonts, metadata)
-├── globals.css          # Global styles
-└── favicon.ico          # Favicon
+├── sitemap.ts             # SEO: Dynamic sitemap generation
+├── robots.ts              # SEO: Robots.txt configuration
+└── manifest.ts            # PWA: Web app manifest
 ```
 
 **Responsibilities:**
@@ -99,9 +129,19 @@ app/
 
 **Route Groups:**
 
-- `(auth)` - Authentication pages with minimal layout
 - `(root)` - Public-facing pages with main layout
-- `dashboard` - Protected dashboard pages with dashboard layout
+- Additional route groups can be added for auth, dashboard, etc.
+
+**Internationalization:**
+
+- All routes are nested under `[locale]/` dynamic segment
+- Supports English (en), Arabic (ar), and French (fr)
+- Root layout includes:
+  - i18n provider (NextIntlClientProvider)
+  - Locale-aware metadata
+  - Direction (dir) attribute for RTL/LTR
+  - Proper font loading per locale
+  - JSON-LD structured data
 
 ### 2.2 Feature Layer (`features/`)
 
@@ -173,7 +213,8 @@ The **Shared Layer** contains common utilities, types, and components used acros
 │   └── utils/           # Utility functions
 │
 └── lib/                 # Library configurations
-    └── utils.ts         # Common utility functions
+    ├── utils.ts         # Common utility functions
+    └── seo/             # SEO configuration
 ```
 
 **Responsibilities:**
@@ -192,7 +233,9 @@ The **Shared Layer** contains common utilities, types, and components used acros
 
 **Examples:**
 
-- `components/` - Button, Input, Card, Modal, etc.
+- `components/` - Button, Input, Card, Modal, LocaleSwitcher
+- `lib/i18n/` - Locale configs, translations, navigation
+- `lib/seo/` - Metadata, structured data, sitemap
 - `shared/types/` - User, Product, Order types
 - `shared/utils/` - formatDate, formatCurrency, etc.
 - `shared/constants/` - API endpoints, config values

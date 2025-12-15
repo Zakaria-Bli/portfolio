@@ -1,3 +1,5 @@
+import { Locale } from "@/lib/i18n"
+
 import { siteConfig } from "./config"
 
 /**
@@ -5,6 +7,7 @@ import { siteConfig } from "./config"
  */
 type WithContext<T> = T & {
   "@context": "https://schema.org"
+  inLanguage?: string
 }
 
 type Thing = {
@@ -52,13 +55,14 @@ type BreadcrumbList = {
 /**
  * Generate Website schema
  */
-export function websiteSchema(): WithContext<WebSite> {
+export function websiteSchema(locale: Locale = "en"): WithContext<WebSite> {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteConfig.name,
     url: siteConfig.url,
     description: siteConfig.description,
+    inLanguage: locale,
     author: {
       "@type": "Person",
       name: siteConfig.author.name,
@@ -70,13 +74,17 @@ export function websiteSchema(): WithContext<WebSite> {
 /**
  * Generate Person schema (for portfolio/personal sites)
  */
-export function personSchema(overrides?: Partial<Person>): WithContext<Person> {
+export function personSchema(
+  overrides?: Partial<Person>,
+  locale: Locale = "en"
+): WithContext<Person> {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.author.name,
     url: siteConfig.author.url,
     email: siteConfig.author.email,
+    inLanguage: locale,
     sameAs: [siteConfig.links.github, siteConfig.links.linkedin].filter(
       Boolean
     ),
@@ -88,7 +96,8 @@ export function personSchema(overrides?: Partial<Person>): WithContext<Person> {
  * Generate Organization schema (for company/agency sites)
  */
 export function organizationSchema(
-  overrides?: Partial<Organization>
+  overrides?: Partial<Organization>,
+  locale: Locale = "en"
 ): WithContext<Organization> {
   return {
     "@context": "https://schema.org",
@@ -96,6 +105,7 @@ export function organizationSchema(
     name: siteConfig.name,
     url: siteConfig.url,
     logo: `${siteConfig.url}/logo.png`,
+    inLanguage: locale,
     sameAs: [siteConfig.links.github, siteConfig.links.linkedin].filter(
       Boolean
     ),
@@ -107,11 +117,13 @@ export function organizationSchema(
  * Generate Breadcrumb schema
  */
 export function breadcrumbSchema(
-  items: Array<{ name: string; url?: string }>
+  items: Array<{ name: string; url?: string }>,
+  locale: Locale = "en"
 ): WithContext<BreadcrumbList> {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    inLanguage: locale,
     itemListElement: items.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,

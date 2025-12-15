@@ -1,0 +1,17 @@
+{
+  "common": {
+    "language": "اللغة"
+  },
+  "Metadata": {
+    "title": "iZak Code - مطور شامل",
+    "description": "مطور شامل متخصص في React و Next.js و TypeScript. بناء تطبيقات ويب حديثة مع تجربة مستخدم رائعة."
+  },
+  "HomePage": {
+    "title": "للبدء، قم بتعديل ملف page.tsx.",
+    "description": "هل تبحث عن نقطة انطلاق أو المزيد من التعليمات؟ توجه إلى <templates>القوالب</templates> أو مركز <learning>التعلم</learning>.",
+    "deployNow": "انشر الآن",
+    "documentation": "الوثائق",
+    "nextLogoAlt": "شعار Next.js",
+    "vercelLogoAlt": "شعار Vercel"
+  }
+}

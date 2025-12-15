@@ -26,6 +26,8 @@ I chose this specific stack to demonstrate a production-ready environment:
 - **Library**: [React 19](https://react.dev/) - Utilizing Server Components and Actions for efficient data handling.
 - **Language**: [TypeScript](https://www.typescriptlang.org/) - For strict type safety.
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) - For rapid, maintainable styling.
+- **Internationalization**: [next-intl](https://next-intl-docs.vercel.app/) - For multi-language support with RTL/LTR handling.
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) - For consistent, accessible components.
 - **Architecture Enforcement**: [ESLint](https://eslint.org/) + `eslint-plugin-boundaries`.
 - **Package Manager**: [pnpm](https://pnpm.io/) - For speed and efficiency.
 
@@ -33,34 +35,91 @@ I chose this specific stack to demonstrate a production-ready environment:
 
 This project adopts a **Feature-Sliced** inspired architecture. I organize code by "what it does" (features) rather than "what it is" (components, hooks).
 
+### Key Features Implemented
+
+#### 🌍 Internationalization (i18n)
+
+I built a comprehensive multi-language system supporting:
+
+- **3 Locales**: English (default), Arabic (RTL), French
+- **Locale-based routing**: Clean URLs like `/en/`, `/ar/`, `/fr/`
+- **RTL/LTR support**: Proper text direction and font loading
+- **Type-safe translations**: Leveraging TypeScript for all translation keys
+- **Server & Client Components**: Works seamlessly throughout the app
+
+📖 **[Read the i18n implementation guide →](./lib/i18n/README.md)**
+
+#### 🔍 SEO Optimization
+
+I implemented modern SEO practices including:
+
+- **Locale-aware metadata**: Translated titles and descriptions
+- **Structured data**: JSON-LD schemas for better search engine understanding
+- **Open Graph**: Rich social media previews
+- **Dynamic sitemap**: Automatically generated at `/sitemap.xml`
+- **Robots.txt**: Proper crawler directives
+- **PWA support**: Web app manifest for installation
+- **Hreflang tags**: Proper language version signals to search engines
+
+📖 **[Read the SEO implementation guide →](./lib/seo/README.md)**
+
 ### Folder Structure
 
-The `src` directory is the heart of the application:
+The application is organized with clear separation of concerns:
 
 ```
-src/
-├── app/          # Next.js App Router (Entry points, Layouts, Pages)
-├── features/     # Feature-based modules (Domain logic, specific components)
-│   ├── auth/
-│   ├── blog/
-│   └── projects/
-└── shared/       # Shared utilities, hooks, and generic UI components
-    ├── components/
-    ├── lib/
-    └── utils/
+portfolio-next/
+├── app/                    # Next.js App Router
+│   ├── [locale]/          # Dynamic locale routes (en, ar, fr)
+│   │   ├── (root)/       # Public pages
+│   │   └── layout.tsx    # Root layout with i18n provider
+│   ├── sitemap.ts        # SEO: Dynamic sitemap
+│   ├── robots.ts         # SEO: Crawler directives
+│   └── manifest.ts       # PWA: Web app manifest
+│
+├── components/            # Shared UI components
+│   ├── shared/           # App-wide components
+│   │   └── LocaleSwitcher.tsx
+│   └── ui/               # shadcn/ui components
+│
+├── features/              # Feature-based modules
+│   └── [feature-name]/   # Domain-specific logic
+│
+├── lib/                   # Library configurations
+│   ├── i18n/             # Internationalization
+│   │   ├── config.ts     # Locale definitions
+│   │   ├── navigation.ts # Type-safe navigation
+│   │   └── messages/     # Translation files
+│   ├── seo/              # SEO configuration
+│   │   ├── config.ts     # Metadata generation
+│   │   └── schema.ts     # Structured data
+│   └── utils.ts          # Shared utilities
+│
+├── shared/                # Shared utilities
+│   ├── constants/        # App constants
+│   ├── types/            # Shared types
+│   └── utils/            # Helper functions
+│
+└── proxy.ts               # Routing proxy (Next.js 16)
 ```
 
 ### Architectural Boundaries
 
-To maintain a clean dependency graph, we enforce the following rules:
+To maintain a clean dependency graph, I enforce the following rules:
 
-1.  **App Layer (`src/app`)**: Can import from `features` and `shared`. This layer orchestrates the application but contains minimal business logic.
-2.  **Feature Layer (`src/features`)**:
-    - Can import from `shared`.
+1.  **App Layer (`app/`)**: Can import from `features`, `components`, and `lib`. This layer orchestrates the application but contains minimal business logic.
+2.  **Feature Layer (`features/`)**:
+    - Can import from `lib`, `shared`, and `components`.
     - **Cannot** import from `app`.
     - **Cannot** import from other `features` directly (unless via a public API or shared interface, though strict isolation is preferred).
-3.  **Shared Layer (`src/shared`)**:
+3.  **Library Layer (`lib/`)**: Contains configuration and utilities (i18n, SEO, etc.)
+    - Can import from `shared`.
+    - **Cannot** import from `app` or `features`.
+4.  **Shared Layer (`shared/`)**: Core utilities, types, and constants
     - Can only import from other `shared` modules.
+    - **Cannot** import from `app`, `features`, or `lib`.
+5.  **Components Layer (`components/`)**: Reusable UI components
+    - Can import from `lib` and `shared`.
     - **Cannot** import from `app` or `features`.
 
 These rules are automated using `eslint-plugin-boundaries`, ensuring that architectural violations are caught at development time.

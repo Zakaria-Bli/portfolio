@@ -1,3 +1,7 @@
+import { getTranslations } from "next-intl/server"
+
+import { Locale, localesCodes } from "@/lib/i18n"
+
 import type { Metadata } from "next"
 
 /**
@@ -40,55 +44,64 @@ export const siteConfig = {
 }
 
 /**
- * Default metadata configuration for the application
- * This can be extended or overridden in individual pages
+ * Generate default metadata for a given locale
  */
-export const defaultMetadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  authors: [
-    {
-      name: siteConfig.author.name,
-      url: siteConfig.author.url,
+export async function getMetadata(locale: Locale): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: "Metadata" })
+
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: {
+      default: t("title"),
+      template: `%s | ${t("title")}`,
     },
-  ],
-  creator: siteConfig.author.name,
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteConfig.url,
-    title: siteConfig.name,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
-    images: [
+    description: t("description"),
+    keywords: siteConfig.keywords,
+    authors: [
       {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
+        name: siteConfig.author.name,
+        url: siteConfig.author.url,
       },
     ],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    creator: siteConfig.author.name,
+    openGraph: {
+      type: "website",
+      locale: locale,
+      url: `${siteConfig.url}/${locale}`,
+      title: t("title"),
+      description: t("description"),
+      siteName: t("title"),
+      images: [
+        {
+          url: siteConfig.ogImage,
+          width: 1200,
+          height: 630,
+          alt: t("title"),
+        },
+      ],
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/manifest.webmanifest",
+    icons: {
+      icon: "/favicon.ico",
+      shortcut: "/favicon.ico",
+      apple: "/apple-touch-icon.png",
+    },
+    manifest: "/manifest.webmanifest",
+    alternates: {
+      canonical: `/${locale}`,
+      languages: Object.fromEntries(
+        localesCodes.map((code) => [code, `/${code}`])
+      ),
+    },
+  }
 }
